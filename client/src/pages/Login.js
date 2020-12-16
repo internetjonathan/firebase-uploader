@@ -40,7 +40,7 @@ export default function Login(props) {
                 //     ...prevState,
                 //     loading: true,
                 // }))
-                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
                 props.history.push('/');
             })
             .catch(err => {

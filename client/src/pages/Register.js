@@ -18,6 +18,8 @@ export default function Register(props) {
     const [state, setState] = useState({
         email: "",
         password: "",
+        confirmPassword: "",
+        userName: ""
     })
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -29,18 +31,20 @@ export default function Register(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const payload = {
+        const newUserData = {
             "email": state.email,
             "password": state.password,
+            "confirmPassword": state.confirmPassword,
+            "userName": state.confirmPassword
         }
         setLoading(true)
-        axios.post('/login', payload)
+        axios.post('/register', newUserData)
             .then(res => {
                 // setState(prevState => ({
                 //     ...prevState,
                 //     loading: true,
                 // }))
-                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
                 props.history.push('/');
             })
             .catch(err => {
