@@ -7,6 +7,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import axios from 'axios'
 
 
 
@@ -35,6 +36,15 @@ export default function TransitionsModal() {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleUploadChange = (e) => {
+        const image = e.target.files[0]
+        const formData = new FormData();
+        formData.append('image', image, image.name)
+        axios.post('/post', formData)
+            .then(res => {
+                console.log('successful')
+            })
+    }
 
     return (
         <div>

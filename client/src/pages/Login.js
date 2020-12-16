@@ -36,11 +36,7 @@ export default function Login(props) {
         setLoading(true)
         axios.post('/login', payload)
             .then(res => {
-                // setState(prevState => ({
-                //     ...prevState,
-                //     loading: true,
-                // }))
-                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
                 props.history.push('/');
             })
             .catch(err => {
