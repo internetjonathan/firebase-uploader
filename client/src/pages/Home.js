@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom'
 
 
 import Typography from '@material-ui/core/Typography';
@@ -27,9 +28,8 @@ export default function Home(props) {
         };
         fetchData();
     }, []);
-    // console.log(props.location.state)
 
-    let recentPosts = data ? (data.filter(item => item.category === props.status).map(item =>
+    let recentPosts = data ? (data.filter(item => item.category === props.category).map(item =>
         <Grid item md={2} sm={4} xs={6} key={item.postId}>
             <Card style={{ textAlign: 'center' }}>
                 <CardContent>
@@ -47,7 +47,7 @@ export default function Home(props) {
                         <a href="mailto:miami.dionne@gmail.com"><EmailIcon /></a>
                     </Button>
                     <Button>
-                        <a target="_blank" rel='noreferrer' href={item.imgUrl} download={item.imgUrl}><GetAppIcon /></a>
+                        <a target="_blank" rel='noreferrer' href={item.imgUrl} download><GetAppIcon /></a>
                     </Button>
                 </CardActions>
             </Card>
