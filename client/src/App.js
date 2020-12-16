@@ -7,8 +7,8 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import AuthRoute from './util/AuthRoute'
 
 //REDUX
-import { Provider } from 'react-redux'
-import store from './redux/store'
+// import { Provider } from 'react-redux'
+// import store from './redux/store'
 
 import SideBar from './components/SideBar'
 import Home from './pages/Home';
@@ -48,23 +48,25 @@ if (token) {
     authenticated = true
   }
 
+} else {
+  authenticated = false
 }
 
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <Provider store={store}>
-        <Router>
-          <SideBar />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <AuthRoute exact path="/login" component={Login} authenticated={authenticated} />
-              <AuthRoute exact path="/register" component={Register} authenticated={authenticated} />
-            </Switch>
-          </div>
-        </Router>
-      </Provider>
+      {/* <Provider store={store}> */}
+      <Router>
+        <SideBar />
+        <div className="container">
+          <Switch>
+            <AuthRoute exact path="/" component={Home} authenticated={authenticated} auth />
+            <AuthRoute exact path="/login" component={Login} authenticated={authenticated} guest />
+            <AuthRoute exact path="/register" component={Register} authenticated={authenticated} guest />
+          </Switch>
+        </div>
+      </Router>
+      {/* </Provider> */}
     </MuiThemeProvider>
   );
 }

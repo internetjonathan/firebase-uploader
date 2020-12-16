@@ -2,11 +2,14 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
 function AuthRoute(props) {
-    if (props.authenticated === true) {
-        return <Redirect to="/" />
-    } else if (props.authenticated === false) {
+    console.log(props)
+
+    if (props.auth && props.authenticated === false) {
         return <Redirect to="/login" />
-    } else {
+    } else if (props.guest && props.authenticated === true) {
+        return <Redirect to="/" />
+    }
+    else {
         return <Route component={props.component} {...props} />
     }
     // <Route

@@ -35,15 +35,11 @@ export default function Register(props) {
             "email": state.email,
             "password": state.password,
             "confirmPassword": state.confirmPassword,
-            "userName": state.confirmPassword
+            "userName": state.userName
         }
         setLoading(true)
-        axios.post('/register', newUserData)
+        axios.post('/signup', newUserData)
             .then(res => {
-                // setState(prevState => ({
-                //     ...prevState,
-                //     loading: true,
-                // }))
                 localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
                 props.history.push('/');
             })
@@ -72,9 +68,9 @@ export default function Register(props) {
                 <form noValidate onSubmit={handleSubmit}>
                     <TextField style={{ display: "flex" }} id="email" name="email" type="email" label="Email" value={state.email} onChange={handleChange} helperText={errors.email} error={errors.email ? true : false}>
                     </TextField>
-                    <TextField style={{ display: "flex" }} id="userName" name="userName" type="input" label="User Name" value={state.password} onChange={handleChange} helperText={errors.password} error={errors.password ? true : false}></TextField>
+                    <TextField style={{ display: "flex" }} id="userName" name="userName" type="input" label="User Name" value={state.userName} onChange={handleChange} helperText={errors.password} error={errors.password ? true : false}></TextField>
                     <TextField style={{ display: "flex" }} id="password" name="password" type="password" label="Password" value={state.password} onChange={handleChange} helperText={errors.password} error={errors.password ? true : false}></TextField>
-                    <TextField style={{ display: "flex" }} id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" value={state.password} onChange={handleChange} helperText={errors.password} error={errors.password ? true : false}></TextField>
+                    <TextField style={{ display: "flex" }} id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" value={state.confirmPassword} onChange={handleChange} helperText={errors.password} error={errors.password ? true : false}></TextField>
 
                     {errors.general && (
                         <Typography variant="body2" >
