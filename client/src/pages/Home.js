@@ -4,16 +4,15 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
-
 
 import Typography from '@material-ui/core/Typography';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import EmailIcon from '@material-ui/icons/Email';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import axios from 'axios'
+import { IconButton } from '@material-ui/core';
 
 export default function Home(props) {
     const [data, setData] = useState(null);
@@ -28,13 +27,33 @@ export default function Home(props) {
         };
         fetchData();
     }, []);
+    axios.defaults.headers.delete['Authorization'] = localStorage.getItem('FBtoken')
+
+    // const deletePost = (postId) => {
+    //     let index;
+    //     axios.delete(`/post/${postId}`)
+    //         .then(res => {
+    //             console.log('success')
+    //             index = data.findIndex(post => post.postId === postId)
+    //             setData(data.splice(index, 1))
+    //         })
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // }
 
     let recentPosts = data ? (data.filter(item => item.category === props.category).map(item =>
         <Grid item md={2} sm={4} xs={6} key={item.postId}>
             <Card style={{ textAlign: 'center' }}>
                 <CardContent>
+                    <Typography style={{ textAlign: 'right', padding: 0 }}>
+                        <IconButton color="secondary" onClick={() => deletePost(item.postId)}>
+                            <HighlightOffIcon />
+                        </IconButton>
+                    </Typography>
                     <Typography variant="h6" component="h5">
                         {item.title}
+
                     </Typography>
                 </CardContent>
                 <CardContent>
@@ -44,7 +63,7 @@ export default function Home(props) {
                 </CardContent>
                 <CardActions style={{ justifyContent: 'center' }}>
                     <Button>
-                        <a href="mailto:miami.dionne@gmail.com"><EmailIcon /></a>
+                        <a href={`mailto:?subject=${item.title}&body=${item.imgUrl}`}><EmailIcon /></a>
                     </Button>
                     <Button>
                         <a target="_blank" rel='noreferrer' href={item.imgUrl} download><GetAppIcon /></a>

@@ -36,11 +36,11 @@ const theme = createMuiTheme({
 });
 
 let authenticated;
-
+let decodedToken
 const token = localStorage.FBtoken
 
 if (token) {
-  const decodedToken = jwtDecode(token)
+  decodedToken = jwtDecode(token)
   if (decodedToken.exp * 1000 < Date.now()) {
     window.location.href = '/login'
     authenticated = false
@@ -57,7 +57,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       {/* <Provider store={store}> */}
       <Router>
-        <SideBar />
+        <SideBar decodedToken={decodedToken} authenticated={authenticated} />
         <div className="container">
           <Switch>
             <AuthRoute exact path="/" component={Home} authenticated={authenticated} auth />

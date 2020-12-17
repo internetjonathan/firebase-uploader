@@ -2,23 +2,22 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom'
+import logo from '../fabric-logo.png'
 
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Modal from './Modal'
 import FolderIcon from '@material-ui/icons/Folder';
 
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
     },
     hide: {
-        display: 'none',
+        visibility: "hidden",
     },
     drawer: {
         width: drawerWidth,
@@ -81,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -97,6 +96,15 @@ export default function PersistentDrawerLeft() {
     const handleOpen = () => {
         setOpen(true);
     };
+    const doSomething = () => {
+        console.log('hi')
+        localStorage.removeItem('FBtoken')
+        window.location.reload();
+    }
+    let user;
+    if (props.decodedToken !== undefined) {
+        user = props.decodedToken.firebase.identities.email[0]
+    }
 
 
     return (
@@ -108,19 +116,22 @@ export default function PersistentDrawerLeft() {
                     [classes.appBarShift]: open,
                 })}
             >
-                <Toolbar>
-                    <IconButton
+                <Toolbar style={{ justifyContent: "space-between" }}>
+                    {props.authenticated === true && <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
+
                         className={clsx(classes.menuButton, open && classes.hide)}
                     >
                         <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Fabric Tent
-          </Typography>
+                    </IconButton>}
+                    <div></div>
+
+                    <div style={{ height: 50 }}>
+                        <img src={logo} alt="logo" height="100%" />
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -139,7 +150,8 @@ export default function PersistentDrawerLeft() {
                 </div>
                 <Divider />
                 <List>
-                    <Modal />
+                    {(user && user === 'user8@gmail.com') && <Modal />}
+
                     {['New Accounts', 'Drops', 'Price Lists', 'Specs', 'Catalog'].map((text, index) => (
                         <ListItem button component={Link}
                             to={{
@@ -154,7 +166,14 @@ export default function PersistentDrawerLeft() {
                         </ListItem>
                     ))}
                 </List>
+                <Divider />
+                <ListItem button onClick={doSomething}>
+                    <ListItemIcon>
+                        <MeetingRoomIcon />
+                    </ListItemIcon>
+                    <ListItemText>Logout</ListItemText>
+                </ListItem>
             </Drawer>
-        </div>
+        </div >
     );
 }
