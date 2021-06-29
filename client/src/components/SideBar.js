@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom'
 import logo from '../fabric-logo.png'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -26,6 +27,9 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -101,10 +105,8 @@ export default function PersistentDrawerLeft(props) {
         localStorage.removeItem('FBtoken')
         window.location.reload();
     }
-    let user;
-    if (props.decodedToken !== undefined) {
-        user = props.decodedToken.firebase.identities.email[0]
-    }
+
+    // console.log(props.user)
 
 
     return (
@@ -116,7 +118,7 @@ export default function PersistentDrawerLeft(props) {
                     [classes.appBarShift]: open,
                 })}
             >
-                <Toolbar style={{ justifyContent: "space-between" }}>
+                <Toolbar>
                     {props.authenticated === true && <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -129,7 +131,7 @@ export default function PersistentDrawerLeft(props) {
                     </IconButton>}
                     <div></div>
 
-                    <div style={{ height: 50 }}>
+                    <div style={{ height: 35 }}>
                         <img src={logo} alt="logo" height="100%" />
                     </div>
                 </Toolbar>
@@ -150,21 +152,112 @@ export default function PersistentDrawerLeft(props) {
                 </div>
                 <Divider />
                 <List>
-                    {(user && user === 'user8@gmail.com') && <Modal />}
+                    {(props.user && props.user === 'user8@gmail.com') && <Modal />}
 
-                    {['New Accounts', 'Drops', 'Price Lists', 'Specs', 'Catalog'].map((text, index) => (
-                        <ListItem button component={Link}
+                    <ListItem button >
+                        <ListItemIcon><FolderIcon /></ListItemIcon>
+                        <ListItemText primary='Price Lists' />
+                    </ListItem>
+                    <List component="div" disablePadding>
+                        <ListItem className={classes.nested} onClick={handleDrawerClose} button component={Link}
                             to={{
                                 pathname: `/`,
                                 state: {
-                                    category: text,
+                                    category: 'priceLists/wholesale',
                                 }
                             }}
-                            key={text}>
+                        >
                             <ListItemIcon><FolderIcon /></ListItemIcon>
-                            <ListItemText primary={text} />
+                            <ListItemText primary='Wholesale' />
                         </ListItem>
-                    ))}
+
+                        <ListItem className={classes.nested} onClick={handleDrawerClose} button component={Link}
+                            to={{
+                                pathname: `/`,
+                                state: {
+                                    category: 'priceLists/contract',
+                                }
+                            }}
+                        >
+                            <ListItemIcon><FolderIcon /></ListItemIcon>
+                            <ListItemText primary='Contract' />
+                        </ListItem>
+
+                        <ListItem className={classes.nested} onClick={handleDrawerClose} button component={Link}
+                            to={{
+                                pathname: `/`,
+                                state: {
+                                    category: 'priceLists/manufacturer',
+                                }
+                            }}
+                        >
+                            <ListItemIcon><FolderIcon /></ListItemIcon>
+                            <ListItemText primary='Manufacturer' />
+                        </ListItem>
+                    </List>
+                    <ListItem button>
+                        <ListItemIcon><FolderIcon /></ListItemIcon>
+                        <ListItemText primary='Catalogs' />
+                    </ListItem>
+                    <List component="div" disablePadding>
+                        <ListItem className={classes.nested} onClick={handleDrawerClose} button component={Link}
+                            to={{
+                                pathname: `/`,
+                                state: {
+                                    category: 'catalogs/european',
+                                }
+                            }}
+                        >
+                            <ListItemIcon><FolderIcon /></ListItemIcon>
+                            <ListItemText primary='European' />
+                        </ListItem>
+
+                        <ListItem className={classes.nested} onClick={handleDrawerClose} button component={Link}
+                            to={{
+                                pathname: `/`,
+                                state: {
+                                    category: 'catalogs/durarods',
+                                }
+                            }}
+                        >
+                            <ListItemIcon><FolderIcon /></ListItemIcon>
+                            <ListItemText primary='Durarods' />
+                        </ListItem>
+                    </List>
+                    <ListItem button onClick={handleDrawerClose} component={Link}
+                        to={{
+                            pathname: `/`,
+                            state: {
+                                category: 'specs',
+                            }
+                        }}
+                    >
+                        <ListItemIcon><FolderIcon /></ListItemIcon>
+                        <ListItemText primary='Specs' />
+
+                    </ListItem>
+                    <ListItem button onClick={handleDrawerClose} component={Link}
+                        to={{
+                            pathname: `/`,
+                            state: {
+                                category: 'pointOfSale',
+                            }
+                        }}
+                    >
+                        <ListItemIcon><FolderIcon /></ListItemIcon>
+                        <ListItemText primary='Point of Sale' />
+                    </ListItem>
+                    <ListItem button component={Link}
+                        to={{
+                            pathname: `/`,
+                            state: {
+                                category: 'misc',
+                            }
+                        }}
+                    >
+                        <ListItemIcon><FolderIcon /></ListItemIcon>
+                        <ListItemText primary='Misc' />
+                    </ListItem>
                 </List>
                 <Divider />
                 <ListItem button onClick={doSomething}>

@@ -23,26 +23,35 @@ export default function Home(props) {
                 '/posts'
             );
             setData(result.data);
-            console.log(result.data)
         };
         fetchData();
     }, []);
     axios.defaults.headers.delete['Authorization'] = localStorage.getItem('FBtoken')
+    axios.defaults.headers.post['Authorization'] = localStorage.getItem('FBtoken')
 
-    // const deletePost = (postId) => {
-    //     let index;
-    //     axios.delete(`/post/${postId}`)
-    //         .then(res => {
-    //             console.log('success')
-    //             index = data.findIndex(post => post.postId === postId)
-    //             setData(data.splice(index, 1))
-    //         })
-    //         .catch(err => {
-    //             console.log(err)
-    //         })
-    // }
 
-    let recentPosts = data ? (data.filter(item => item.category === props.category).map(item =>
+    const deletePost = (postId) => {
+        axios.delete(`/post/${postId}`)
+            .then(res => {
+                const index = data.findIndex(post => post.postId === postId)
+                const newArr = [...data]
+                newArr.splice(index, 1)
+                setData(newArr)
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+    let location
+
+    if (props.location.state === undefined) {
+        location = 'priceList'
+    } else {
+        location = props.location.state.category
+    }
+
+    let recentPosts = data ? (data.filter(item => item.category === location).map(item =>
         <Grid item md={2} sm={4} xs={6} key={item.postId}>
             <Card style={{ textAlign: 'center' }}>
                 <CardContent>
@@ -51,9 +60,8 @@ export default function Home(props) {
                             <HighlightOffIcon />
                         </IconButton>
                     </Typography>
-                    <Typography variant="h6" component="h5">
+                    <Typography variant="h6" component="h5" style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', }} >
                         {item.title}
-
                     </Typography>
                 </CardContent>
                 <CardContent>
@@ -63,10 +71,10 @@ export default function Home(props) {
                 </CardContent>
                 <CardActions style={{ justifyContent: 'center' }}>
                     <Button>
-                        <a href={`mailto:?subject=${item.title}&body=${item.imgUrl}`}><EmailIcon /></a>
+                        <a href={`mailto:?subject=${item.title}&body=${item.imageUrl}`}><EmailIcon /></a>
                     </Button>
                     <Button>
-                        <a target="_blank" rel='noreferrer' href={item.imgUrl} download><GetAppIcon /></a>
+                        <a target="_blank" rel='noreferrer' href={item.imageUrl} download><GetAppIcon /></a>
                     </Button>
                 </CardActions>
             </Card>

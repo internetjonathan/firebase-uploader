@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+
+import DragDropUploader from './DragDropUploader'
+import Uploader from './Uploader';
 
 
 
@@ -25,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionsModal() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
         setOpen(true);
@@ -56,7 +60,8 @@ export default function TransitionsModal() {
                 <Fade in={open}>
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">Upload Document</h2>
-                        <p id="transition-modal-description">Form Will go Here</p>
+                        <DragDropUploader handleClose={handleClose} />
+                        {/* <Uploader handleClose={handleClose} /> */}
                     </div>
                 </Fade>
             </Modal>

@@ -12,7 +12,7 @@ import { Typography } from '@material-ui/core';
 
 
 
-export default function Login(props) {
+export default function Login() {
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({})
     const [state, setState] = useState({

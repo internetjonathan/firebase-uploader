@@ -5,6 +5,7 @@ import './App.css';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import AuthRoute from './util/AuthRoute'
+import axios from 'axios'
 
 //REDUX
 // import { Provider } from 'react-redux'
@@ -39,11 +40,14 @@ let authenticated;
 let decodedToken
 const token = localStorage.FBtoken
 
+axios.defaults.baseURL = 'https://us-central1-file-uploader-6a3c1.cloudfunctions.net/api'
+
 if (token) {
   decodedToken = jwtDecode(token)
   if (decodedToken.exp * 1000 < Date.now()) {
     window.location.href = '/login'
     authenticated = false
+    localStorage.removeItem('FBtoken')
   } else {
     authenticated = true
   }
@@ -51,13 +55,16 @@ if (token) {
 } else {
   authenticated = false
 }
+let user;
+if (decodedToken !== undefined) {
+  user = decodedToken.firebase.identities.email[0]
+}
 
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      {/* <Provider store={store}> */}
       <Router>
-        <SideBar decodedToken={decodedToken} authenticated={authenticated} />
+        <SideBar user={user} decodedToken={decodedToken} authenticated={authenticated} />
         <div className="container">
           <Switch>
             <AuthRoute exact path="/" component={Home} authenticated={authenticated} auth />
@@ -66,7 +73,6 @@ function App() {
           </Switch>
         </div>
       </Router>
-      {/* </Provider> */}
     </MuiThemeProvider>
   );
 }

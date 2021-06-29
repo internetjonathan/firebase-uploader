@@ -1,6 +1,5 @@
-const { db, admin } = require('../util/admin');
 const config = require('../util/config')
-
+const { db, admin } = require('../util/admin');
 
 exports.getAllPosts = (req, res) => {
     db.collection("posts").get().then((data) => {
@@ -8,10 +7,11 @@ exports.getAllPosts = (req, res) => {
         data.forEach(doc => {
             posts.push({
                 postId: doc.id,
-                imgUrl: doc.data().imgUrl,
+                imageUrl: doc.data().imageUrl,
                 userName: doc.data().userName,
                 createdAt: doc.data().createdAt,
-                title: doc.data().title
+                title: doc.data().title,
+                category: doc.data().category
             })
         });
         return res.json(posts)
@@ -38,16 +38,26 @@ exports.postOnePost = (req, res) => {
         userName: req.user.userName,
         createdAt: new Date().toISOString(),
         imageUrl: null,
-        title: null
+        title: null,
+        category: null,
     };
 
     busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated) {
-        newPost.title = val;
+        console.log(fieldname)
+        console.log(val)
+        if (fieldname === 'title') {
+            newPost.title = val;
+
+        }
+        if (fieldname === 'category') {
+            newPost.category = val;
+
+        }
     });
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         const uploadExtension = filename.split('.')[filename.split('.').length - 1];
-        uploadFileName = `${Math.round(Math.random() * 100000000000000)}.${uploadExtension}`;
+        uploadFileName = `${filename}.${uploadExtension}`;
         const filepath = path.join(os.tmpdir(), uploadFileName);
         fileToBeUploaded = { filepath, mimetype };
         file.pipe(fs.createWriteStream(filepath));
@@ -94,9 +104,7 @@ exports.deletePost = (req, res) => {
             if (!doc.exists) {
                 return res.status(404).json({ error: "post does not exist" })
             }
-            if (doc.data().userName !== req.user.userName) {
-                return res.status(403).json({ error: "unauthorized" })
-            } else {
+            else {
                 return document.delete()
             }
         })

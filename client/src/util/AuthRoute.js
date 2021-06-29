@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
 function AuthRoute(props) {
-    console.log(props)
+    // console.log(props)
 
     if (props.auth && props.authenticated === false) {
         return <Redirect to="/login" />

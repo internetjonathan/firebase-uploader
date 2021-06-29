@@ -3,9 +3,11 @@ const express = require('express');
 const app = express()
 const FBAuth = require('./util/fbAuth')
 
+const cors = require('cors')
+
 const { getAllPosts, postOnePost, deletePost } = require('./handlers/posts')
 const { signUp, logIn } = require('./handlers/users')
-
+app.use(cors())
 //post routes
 app.get('/posts', getAllPosts);
 app.post('/post', FBAuth, postOnePost)
