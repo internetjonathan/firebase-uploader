@@ -11,7 +11,8 @@ exports.getAllPosts = (req, res) => {
                 imgUrl: doc.data().imgUrl,
                 userName: doc.data().userName,
                 createdAt: doc.data().createdAt,
-                title: doc.data().title
+                title: doc.data().title,
+                category: doc.data().category
             })
         });
         return res.json(posts)
@@ -42,12 +43,13 @@ exports.postOnePost = (req, res) => {
     };
 
     busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated) {
-        newPost.title = val;
+        newPost.category = val;
     });
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         const uploadExtension = filename.split('.')[filename.split('.').length - 1];
-        uploadFileName = `${Math.round(Math.random() * 100000000000000)}.${uploadExtension}`;
+        uploadFileName = filename;
+        newPost.title = filename;
         const filepath = path.join(os.tmpdir(), uploadFileName);
         fileToBeUploaded = { filepath, mimetype };
         file.pipe(fs.createWriteStream(filepath));

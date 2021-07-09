@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
         idToken = req.headers.authorization.split('Bearer ')[1];
     } else {
         console.error('No token found')
-        return response.status(403).json({ error: 'Unauthrorized' })
+        return res.status(403).json({ error: 'Unauthrorized' })
     }
 
     admin.auth().verifyIdToken(idToken)
