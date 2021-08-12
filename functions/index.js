@@ -6,6 +6,9 @@ const FBAuth = require('./util/fbAuth')
 const { getAllPosts, postOnePost, deletePost } = require('./handlers/posts')
 const { signUp, logIn } = require('./handlers/users')
 
+const cors = require('cors');
+app.use(cors());
+
 //post routes
 app.get('/posts', getAllPosts);
 app.post('/post', FBAuth, postOnePost)

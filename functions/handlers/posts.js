@@ -8,13 +8,14 @@ exports.getAllPosts = (req, res) => {
         data.forEach(doc => {
             posts.push({
                 postId: doc.id,
-                imgUrl: doc.data().imgUrl,
+                imageUrl: doc.data().imageUrl,
                 userName: doc.data().userName,
                 createdAt: doc.data().createdAt,
                 title: doc.data().title,
                 category: doc.data().category
             })
         });
+        console.log(posts)
         return res.json(posts)
 
     })
